@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Online Charity Managment</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/css/boxicon.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../assets/css/donations/organization.css">
+    {{!--<link rel="stylesheet" href="../assets/css/Create_donation.css">--}}
+
+    <style>
+        
+.pop-up {
+    background-color: #12c0a0;
+    width: 400px;
+    height: 200px;
+    position: absolute;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    transition: 2s;
+    box-shadow: #fabd08;
+    border: 3px solid #fabd08
+}
+
+.pop-up>* {
+    text-align: center;
+    width: 100%;
+}
+
+.pop-up button {
+    width: fit-content !important;
+}
+
+.pop-up.hide {
+    /* top: -100; */
+    z-index: -1000;
+    display: none;
+    /* transition: 2s; */
+}
+
+        .btn {
+            background-color: #fdd55a;
+            color: #006b57;
+            border-radius: 16px 14px 16px 14px;
+            min-width: 150px;
+            min-height: 40px;
+            font-size: large;
+        }
+
+        .btn:hover {
+            background-color: #006b57;
+            color: #fdd55a;
+        }
+
+        
+
+    .form-control-dark {
+      color: #fff;
+      background-color: #006b57;
+      border-color: #006b57;
+    }
+
+    .form-control-dark:focus {
+      border-color: transparent;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+    }
+
+    
+.container header {
+    position: relative;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.container header::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 3px;
+    width: 27px;
+    border-radius: 8px;
+    background-color: #fdd55a;
+}
+
+
+    .container form {
+    position: relative;
+    margin-top: 16px;
+    min-height: 300px;
+    min-width: 600px;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.container form .form {
+    position: absolute;
+    background-color: #fff;
+    transition: 0.3s ease;
+}
+
+.container form .form.second {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(100%);
+}
+
+form.secActive .form.second {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+}
+
+form.secActive .form.first {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-100%);
+}
+
+.container form .title {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 6px 0;
+    color: #006b57;
+}
+
+.container form .fields {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+form .fields .input-field {
+    display: flex;
+    /* width: calc(100% / 3 - 15px); */
+    flex-direction: column;
+    /* margin: 4px 0; */
+}
+
+.second .fields .input-field {
+    display: flex;
+    width: calc(100% / 3 - 15px);
+    flex-direction: column;
+    margin: 4px 0;
+}
+
+.input-field label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #006b57;
+}
+
+.input-field input,
+select {
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(0, 0, 0);
+    border-radius: 5px;
+    border: 1px solid #fdd55a;
+    padding: 0 15px;
+    height: 42px;
+    width: 200px;
+    margin: 8px 0;
+}
+
+.input-field input :focus,
+.input-field select:focus {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.13);
+}
+
+.input-field select,
+.input-field input[type="date"] {
+    color: #000000;
+}
+
+.input-field input[type="date"]:valid {
+    color: rgb(0, 0, 0);
+}
+
+.container form button,
+.backBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    max-width: 150px;
+    width: 100%;
+    border: none;
+    outline: none;
+    color: #006b57;
+    border-radius: 5px;
+    margin: 25px 0;
+    background-color: #fdd55a;
+    transition: all 0.3s linear;
+    cursor: pointer;
+    align-items: center;
+    font-family: "Open Sans";
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.container form .btnText {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+form button:hover {
+    color: #fdd55a;
+    background-color: #006b57;
+}
+
+form button i,
+form .backBtn i {
+    margin: 0 6px;
+}
+
+form .buttons {
+    display: flex;
+    align-items: center;
+}
+
+form .buttons button,
+.backBtn {
+    margin-right: 14px;
+}
+
+/*#submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    max-width: 150px;
+    width: 100%;
+    border: none;
+    outline: none;
+    color: #006b57;
+    border-radius: 5px;
+    margin: 25px 0;
+    background-color: #fdd55a;
+    transition: all 0.3s linear;
+    cursor: pointer;
+    align-items: center;
+    font-family: "Open Sans";
+    font-size: 16px;
+    font-weight: 500;
+} */
+
+.btnText {
+    padding: .4em 2em;
+    display: flex;
+    position: relative;
+    padding: 5px 10px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fdd55a;
+    background-color: #006b57;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #00342a;	
+    
+} 
+
+.btnText:hover {
+    color: #fdd55a;
+    background-color: #00967b;
+}
+
+.btnText:active {
+    color: #fdd55a;
+    background-color: #006b57;
+    box-shadow: 0 5px #00342a;
+    transform: translateY(4px);
+}
+
+.btnsubmit{
+      padding: 10px;
+      padding-left: 700px;
+  justify-content: center;
+}
+.container form .btnText {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+form button:hover {
+    color: #fdd55a;
+    background-color: #006b57;
+}
+
+.form button{
+    color: #006b57;
+    background-color: #fdd55a;
+}
+
+form button i,
+form .backBtn i {
+    margin: 0 6px;
+}
+
+form .button {
+    display: flex;
+    align-items: center;
+    
+}
+
+form .buttons button,
+.backBtn {
+    margin-right: 14px;
+}
+@media (max-width: 750px) {
+    .container form {
+        overflow-y: scroll;
+    }
+    .container form::-webkit-scrollbar {
+        display: none;
+    }
+    form .fields .input-field {
+        width: calc(100% / 2 - 15px);
+    }
+}
+
+@media (max-width: 550px) {
+    form .fields .input-field {
+        width: 100%;
+    }
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+th,
+td {
+    text-align: center;
+    padding: 8px;
+    word-wrap: break-word;
+    color: #006b57
+}
+
+.camping-section-row {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-btn-success{
+    background-color: #006b57;
+
+}
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-white shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand h1" href="index.html">
+                <i class='bx bx-buildings bx-sm text-dark'></i>
+                <span class="text-dark h4">Online</span> <span class="text-warning h4">Charity</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between"
+                id="navbar-toggler-success">
+                <div class="flex-fill mx-xl-5 mb-2">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
+                        <li class="nav-item">
+                            <a class="nav-link btn-outline-warning rounded-pill px-3" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-outline-warning rounded-pill px-3" href="/charity">Charity</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-outline-warning rounded-pill px-3"
+                                href="/Organization">Organizations</a>
+
+                        </li>
+                        {{!-- <li class="nav-item">
+                            <a class="nav-link btn-outline-warning rounded-pill px-3" href="/donate">Donate</a>
+                        </li> 
+                        <li class="nav-item">
+                            <a class="nav-link btn-outline-warning rounded-pill px-3" href="/contact-us">Contact</a>
+                        </li> --}}
+                    </ul>
+                </div>
+                <div class="navbar align-self-center d-flex">
+                    {{!--<a class="nav-link" href="#"><i class='bx bx-bell bx-sm bx-tada-hover text-dark'></i></a>
+                    <a class="nav-link" href="#"><i class='bx bx-cog bx-sm text-dark'></i></a> --}}
+                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown"><i
+                            class='bx bx-user-circle bx-sm text-dark'></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/login-page" id="login">Login</a></li>
+                        <li><a class="dropdown-item" href="/my-profile" id="profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/logout" id="logout">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Close Header -->
+
+    <div id="popup-1" class="container ml-auto mr-auto">
+            <div id="header">
+                <header>Donation form</header>
+                <p>
+                This donation was created by <span id="name"></span>
+                </p>
+                <p>
+                The goal is to collect <span id="goal"></span> before <span id="date"></span>
+                </p>
+            </div>
+            
+            </div>
+
+            <form>
+                <div class="createDonation">
+                    <div >
+                        <div class="fields">
+                            <table class="table">
+
+                                <tbody>
+
+                                    <tr>
+                                        <th scope="row">Items needed</th>                                      
+                                        </td>
+                                        <td class="input-field">
+                                            <select id="items" name="items" required>
+                                                <option value="Cash">Cash</option>
+                                                <option value="Food">Food</option>
+                                                <option value="Hygiene products">Hygiene products</option>
+                                                <option value="Clothes">Clothes</option>
+                                                <option value="Books">Books</option>
+                                                <option value="Toys">Toys</option>                                           
+                                                <option value="Gadgets">Gadgets</option>
+                                                <option value="Homeware">Homeware</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th scope="row"> Amount</th>
+                                        </td>
+                                        <td class="input-field">     
+                                        <input type="text" name="amout" id="amount" placeholder="KSH">
+                                        </td>
+                                    </tr>   
+
+                                    <tr>
+                                        <th scope="row"> Would you like to be anonymous?</th>
+                                        </td>
+                                        <td class="input-field">                                            
+                                        <input type="checkbox" name="anonymous" id="anonymous">
+                                        </td>                                       
+                                    </tr>   
+
+
+                                </tbody>                          
+                            </table>
+                           {{!-- <span class="ml-auto mr-auto text-danger" id="errorMessage">Please enter a valid date starting from Tomorrow</span> --}}
+                        </div>
+                    </div>
+
+                    <div class="btnsubmit">
+ <button class="btnText">Submit</button>
+                    </div>
+                   
+                </div>
+
+            
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+
+
+
+    {{!-- <button class="btn btn-success" id="unique" data-toggle="modal" data-target="#someBox" style="display: none;">BTN</button> --}}
+    <!-- Start Footer -->
+    <footer class="bg-success pt-4">
+        <div class="container">
+            <div class="row py-4">
+
+                <div class="col-lg-3 col-12 align-left">
+                    <a class="navbar-brand" href="index.html">
+                        <!--<i class='bx bx-buildings bx-sm text-light'></i> -->
+                    </a>
+                    <p class="text-light my-lg-4 my-2">
+                        Be the change you want to see in the world - <br>
+                        We believe that everyone has the power to make a difference. <br>
+                        Join us in creating a brighter future for all.
+                    </p>
+                    <ul class="list-inline footer-icons light-300">
+                        <li class="list-inline-item m-0">
+                            <a class="text-light" target="_blank" href="http://facebook.com/">
+                                <i class='bx bxl-facebook-square bx-md'></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item m-0">
+                            <a class="text-light" target="_blank" href="https://www.linkedin.com/">
+                                <i class='bx bxl-linkedin-square bx-md'></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item m-0">
+                            <a class="text-light" target="_blank" href="https://www.whatsapp.com/">
+                                <i class='bx bxl-whatsapp-square bx-md'></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item m-0">
+                            <a class="text-light" target="_blank" href="https://www.flickr.com/">
+                                <i class='bx bxl-flickr-square bx-md'></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item m-0">
+                            <a class="text-light" target="_blank" href="https://www.medium.com/">
+                                <i class='bx bxl-medium-square bx-md'></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-4 my-sm-0 mt-4">
+                    <h3 class="h4 pb-lg-3 text-light light-300">Our Company</h2>
+                        <ul class="list-unstyled text-light light-300">
+                            <li class="pb-2">
+                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a
+                                    class="text-decoration-none text-light" href="/">Home</a>
+                            </li>
+                            <li class="pb-2">
+                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="/charity">Charity</a>
+                            </li>
+                            <li class="pb-2">
+                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="/Organization">Organizations</a>
+                            </li>
+                           {{!-- <li class="pb-2">
+                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="/contact-us">Contact</a>
+                            </li> --}}
+                        </ul>
+                </div>
+
+
+                <div class="col-lg-3 col-md-4 my-sm-0 mt-4" align="right">
+                    <h2 class="h4 pb-lg-3 text-light light-300">For Client</h2>
+                    <ul class="list-unstyled text-light light-300">
+                        <li class="pb-2">
+                            <i class='bx-fw bx bx-phone bx-xs'></i><a class="text-decoration-none text-light py-1"
+                                href="tel:010-020-0340">072-020-0340</a>
+                        </li>
+                        <li class="pb-2">
+                            <i class='bx-fw bx bx-mail-send bx-xs'></i><a class="text-decoration-none text-light py-1"
+                                href="mailto:info@company.com">info@charity.com</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+    <!-- End Footer -->
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="unique" style="display: none;">
+  Launch demo modal
+</button>
+
+
+        <div class="pop-up hide">
+            <div class="message"></div>
+            <button class="btn" id="close">Close</button>
+        </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="message"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        {{!-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Bootstrap -->
+    <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../assets/js/donations/donate_form.js"></script>
+    <script src="../assets/js/home.js"></script>
+
+</body>
+
+</html>
+

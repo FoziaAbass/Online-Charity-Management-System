@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+
+        <style>
+        #myBtn {
+            position: relative;
+            display: inline-block;
+            border: none;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        #myBtn:hover + #myTooltip {
+            display: block;
+        }
+
+        #myTooltip {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            padding: 8px;
+            z-index: 1;
+        }
+
+        #myTooltip button {
+            display: block;
+            border: none;
+            background-color: #fff;
+            color: #000;
+            padding: 8px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        #myTooltip button:hover {
+        background-color: #ddd;
+        }
+
+    </style>
+        <script>
+        const myBtn = document.getElementById("myBtn");
+        const myTooltip = document.getElementById("myTooltip");
+
+        myBtn.addEventListener("mouseenter", function () {
+            myTooltip.style.display = "block";
+        });
+
+        myBtn.addEventListener("mouseleave", function () {
+            myTooltip.style.display = "none";
+        });
+
+    </script>
+    </head>
+    <body>
+        <button id="myBtn">Hover over me</button>
+        <div id="myTooltip">
+            <button>Button 1</button>
+            <button>Button 2</button>
+            <button>Button 3</button>
+        </div>
+
+    </body>
+</html>
